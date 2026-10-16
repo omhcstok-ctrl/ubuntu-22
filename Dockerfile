@@ -88,6 +88,10 @@ COPY src-sync.sh /usr/local/bin/src-sync
 RUN chmod +x /usr/local/bin/src-sync \
     && mkdir -p /root/src
 
+# Set default hostname
+RUN echo "OmhcServer" > /etc/hostname && \
+    echo "127.0.1.1 OmhcServer" >> /etc/hosts
+
 # Expose SSH port
 EXPOSE 22
 
