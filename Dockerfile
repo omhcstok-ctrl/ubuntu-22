@@ -1,32 +1,25 @@
 # ============================================================
-# ARA TM — Railway Ubuntu 22.04 SSH Server (Singapore)
-# Modified for: Ubuntu 22.04 LTS + Asia/Singapore timezone
+# ARA TM — Railway Debian 12 SSH Server (Singapore)
+# Modified for: Debian 12 Bookworm + Asia/Singapore timezone
 # ============================================================
-# A Docker image that provides Ubuntu 22.04 base with SSH server
+# A Docker image that provides Debian 12 base with SSH server
 # (SSHD) enabled, so you can connect to your Railway container via SSH.
 
-FROM ubuntu:22.04
+FROM debian:12
 
-# Remove default "ubuntu" user if it exists (22.04 base doesn't have it, safe with || true)
-RUN userdel -r ubuntu 2>/dev/null || true
-
-# Enable universe + multiverse for Ubuntu 22.04 (uses classic sources.list format)
-RUN sed -i 's/^\(deb .*jammy.*\) main restricted$/\1 main restricted universe multiverse/' /etc/apt/sources.list 2>/dev/null || true
-
-# Install dependencies (Ubuntu 22.04 compatible)
+# Install dependencies (Debian 12 compatible)
 RUN apt-get update \
     && apt-get install -y \
-        ca-certificates gnupg apt-transport-https software-properties-common \
+        ca-certificates gnupg curl wget \
         openssh-server \
-        curl wget \
         iproute2 iputils-ping net-tools dnsutils traceroute whois telnet nmap \
-        vim nano micro \
-        htop btop ncdu neofetch \
+        vim nano \
+        htop ncdu \
         tmux screen less tree bat ripgrep fd-find jq zsh \
         unzip zip tar gzip bzip2 xz-utils p7zip-full \
         git build-essential cmake pkg-config autoconf automake libtool gcc g++ \
         python3 python3-pip python3-venv python3-dev \
-        locales ncurses-term language-pack-en language-pack-fa \
+        locales ncurses-term \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && mkdir -p /run/sshd \
@@ -37,15 +30,15 @@ RUN apt-get update \
 
 # ------------------------------------------------------------
 # Node.js 20 LTS via NodeSource
-# Ubuntu 22.04 apt ships Node v12 → too old for Claude Code (needs >=18)
 # ------------------------------------------------------------
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Generate English + Persian locales
-RUN locale-gen en_US.UTF-8 fa_IR.UTF-8
+# Generate English locale (Debian tidak punya language-pack)
+RUN sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
+    && locale-gen
 
 # Set timezone Asia/Singapore
 RUN ln -sf /usr/share/zoneinfo/Asia/Singapore /etc/localtime \
