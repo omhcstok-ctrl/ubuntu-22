@@ -14,6 +14,13 @@
 # Display language / زبان نمایش
 # Default is English. Set APP_LANG=fa for Persian.
 # پیش‌فرض انگلیسی است. برای فارسی مقدار fa=APP_LANG را تنظیم کنید.
+# ============================================================
+# SET CUSTOM HOSTNAME
+# ============================================================
+CUSTOM_HOSTNAME="OmhcServer"
+echo "$CUSTOM_HOSTNAME" > /etc/hostname 2>/dev/null || true
+hostname "$CUSTOM_HOSTNAME" 2>/dev/null || true
+grep -q "$CUSTOM_HOSTNAME" /etc/hosts 2>/dev/null || echo "127.0.1.1 $CUSTOM_HOSTNAME" >> /etc/hosts 2>/dev/null || true
 : ${APP_LANG:="en"}
 
 # Bilingual message helper / تابع نمایش پیام دوزبانه
