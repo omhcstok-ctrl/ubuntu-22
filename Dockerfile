@@ -1,19 +1,19 @@
 # ============================================================
-# ARA TM — Railway Ubuntu 22.04 SSH Server (Singapore)
-# Modified for: Ubuntu 22.04 LTS + Asia/Singapore timezone
+# ARA TM — Railway Ubuntu 24.04 SSH Server (Singapore)
+# Modified for: Ubuntu 24.04 LTS + Asia/Singapore timezone
 # ============================================================
-# A Docker image that provides Ubuntu 22.04 base with SSH server
+# A Docker image that provides Ubuntu 24.04 base with SSH server
 # (SSHD) enabled, so you can connect to your Railway container via SSH.
 
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
-# Remove default "ubuntu" user if it exists (22.04 base doesn't have it, safe with || true)
+# Remove default "ubuntu" user if it exists (24.04 base doesn't have it, safe with || true)
 RUN userdel -r ubuntu 2>/dev/null || true
 
-# Enable universe + multiverse for Ubuntu 22.04 (uses classic sources.list format)
+# Enable universe + multiverse for Ubuntu 24.04 (uses classic sources.list format)
 RUN sed -i 's/^\(deb .*jammy.*\) main restricted$/\1 main restricted universe multiverse/' /etc/apt/sources.list 2>/dev/null || true
 
-# Install dependencies (Ubuntu 22.04 compatible)
+# Install dependencies (Ubuntu 24.04 compatible)
 RUN apt-get update \
     && apt-get install -y \
         ca-certificates gnupg apt-transport-https software-properties-common \
@@ -37,7 +37,7 @@ RUN apt-get update \
 
 # ------------------------------------------------------------
 # Node.js 20 LTS via NodeSource
-# Ubuntu 22.04 apt ships Node v12 → too old for Claude Code (needs >=18)
+# Ubuntu 24.04 apt ships Node v12 → too old for Claude Code (needs >=18)
 # ------------------------------------------------------------
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs \
