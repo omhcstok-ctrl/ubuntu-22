@@ -97,3 +97,5 @@ EXPOSE 22
 
 # Start SSH
 CMD ["/usr/local/bin/ssh-user-config.sh"]
+
+# Force rebuild - Sat Oct 17 07:05:42 WIB 2026
